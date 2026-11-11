@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme {
+  --color-plum: #491B37;
+  --color-plum-light: #61244a;
+  --color-plum-dark: #321226;
+  --color-ice-blue: #D0E4FF;
+  --color-ice-blue-light: #e6f1ff;
+  --color-ice-blue-dark: #b1d0fa;
+  --color-cream: #FFF8EE;
+  --color-cream-dark: #f6eedb;
+
+  --font-monthey: 'Monthey', 'Playfair Display', serif;
+  --font-playfair: 'Playfair Display', Georgia, serif;
+  --font-signature: 'Photograph Signature', cursive;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ─── Custom Fonts ─── */
+@font-face {
+  font-family: 'Monthey';
+  src: url('/fonts/monthey-regular.otf') format('opentype'),
+       url('/fonts/monthey-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('/fonts/PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Photograph Signature';
+  src: url('/fonts/Photograph_Signature.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── Font utility classes ─── */
+.font-monthey {
+  font-family: 'Monthey', 'Playfair Display', Georgia, serif;
+}
+
+.font-signature {
+  font-family: 'Photograph Signature', cursive;
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* ─── Custom scrollbar ─── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FFF8EE;
+}
+::-webkit-scrollbar-thumb {
+  background: #491B37;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #61244a;
+}
