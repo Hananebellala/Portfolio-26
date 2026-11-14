@@ -9,11 +9,16 @@ import project2 from '../assets/Projects2.png'
 import project3 from '../assets/Projects3.png'
 import project4 from '../assets/Projects4.png'
 
+// Image order matches visual strip: Quality+ → Healio → Switch It → Mousa Coffee
 const projectImages = [project1, project2, project3, project4]
 
 export default function ProjectsSection() {
   const { projects } = portfolioData
   const [activeProject, setActiveProject] = useState(null)
+
+  const openProject = (project, idx) => {
+    setActiveProject({ ...project, image: projectImages[idx] })
+  }
 
   return (
     <section
@@ -29,7 +34,7 @@ export default function ProjectsSection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: idx * 0.1 }}
-            onClick={() => setActiveProject(project)}
+            onClick={() => openProject(project, idx)}
             className="relative cursor-pointer overflow-hidden group"
             style={{ aspectRatio: '3/4' }}
           >
@@ -62,7 +67,7 @@ export default function ProjectsSection() {
             >
               My
             </span>
-            <h2 className="font-monthey text-6xl sm:text-7xl md:text-8xl font-bold text-[#491B37] leading-none">
+            <h2 className="font-monthey text-6xl sm:text-7xl md:text-8xl font-normal text-[#491B37] leading-none">
               projects
             </h2>
           </motion.div>

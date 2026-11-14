@@ -1,20 +1,96 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, ArrowRight, MapPin, Calendar } from 'lucide-react'
 import { portfolioData } from '../data/portfolioData'
 
-// Real photos from src/assets
 import egypt1 from '../assets/Egypt1.png'
 import egypt2 from '../assets/Egypt2.png'
 import egypt3 from '../assets/Egypt3.png'
 import egypt4 from '../assets/Egypt4.png'
-import thankYouImg from '../assets/ThankYou.png'
+import haick1 from '../assets/Haick1.JPG'
+import haick2 from '../assets/Haick2.png'
+import djazairia1 from '../assets/Djazairia1.png'
+import djazairia2 from '../assets/Djazairia2.png'
+import djazairia3 from '../assets/Djazairia3.png'
+import djazairia4 from '../assets/Djazairia4.png'
+import sec1 from '../assets/SEC1.JPG'
+import sec2 from '../assets/SEC2.jpg'
+import sec3 from '../assets/SEC3.png'
+import ignite1 from '../assets/Ignite1.jpg'
+import ignite2 from '../assets/Ignite2.JPG'
 
-const egyptPhotos = { egypt1, egypt2, egypt3, egypt4 }
+const photoMap = {
+  egypt1, egypt2, egypt3, egypt4,
+  haick1, haick2,
+  djazairia1, djazairia2, djazairia3, djazairia4,
+  sec1, sec2, sec3,
+  ignite1, ignite2,
+}
+
+function PhotoLayout({ item }) {
+  const photos = item.photos
+
+  if (item.layout === 'stack-vertical') {
+    return (
+      <div className="lg:col-span-7 flex flex-col gap-3 sm:gap-4">
+        {photos.map((photo, idx) => (
+          <div key={idx} className="overflow-hidden w-full" style={{ aspectRatio: '16/10' }}>
+            <img
+              src={photoMap[photo.assetKey]}
+              alt={photo.caption}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  if (item.layout === 'side-by-side') {
+    return (
+      <div className="lg:col-span-7 grid grid-cols-2 gap-3 sm:gap-4">
+        {photos.map((photo, idx) => (
+          <div key={idx} className="overflow-hidden" style={{ aspectRatio: '3/4' }}>
+            <img
+              src={photoMap[photo.assetKey]}
+              alt={photo.caption}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  // Default / grid-2x2 (also used when 3 photos — last spans or fills)
+  const isThree = photos.length === 3
+  return (
+    <div className={`lg:col-span-7 grid gap-3 sm:gap-4 ${isThree ? 'grid-cols-2' : 'grid-cols-2'}`}>
+      {photos.map((photo, idx) => (
+        <div
+          key={idx}
+          className={`overflow-hidden ${isThree && idx === 2 ? 'col-span-2' : ''}`}
+          style={{ aspectRatio: isThree && idx === 2 ? '21/9' : '1/1' }}
+        >
+          <img
+            src={photoMap[photo.assetKey]}
+            alt={photo.caption}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ))}
+    </div>
+  )
+}
 
 export default function BeyondWorkSection() {
   const { beyondWork } = portfolioData
-  const activeItem = beyondWork.items[0]
+  const [activeIndex, setActiveIndex] = useState(0)
+  const items = beyondWork.items
+  const activeItem = items[activeIndex]
+
+  const goPrev = () => setActiveIndex((i) => (i - 1 + items.length) % items.length)
+  const goNext = () => setActiveIndex((i) => (i + 1) % items.length)
 
   return (
     <section
@@ -28,7 +104,7 @@ export default function BeyondWorkSection() {
           <span className="font-signature text-4xl sm:text-5xl text-[#D0E4FF] block leading-none mb-[-8px]">
             beyond
           </span>
-          <h2 className="font-monthey text-6xl sm:text-7xl md:text-8xl font-bold text-[#FFF8EE] leading-none">
+          <h2 className="font-monthey text-6xl sm:text-7xl md:text-8xl font-normal text-[#FFF8EE] leading-none">
             work
           </h2>
           <p className="mt-4 text-sm text-[#FFF8EE]/70 tracking-wide font-light">
@@ -47,27 +123,16 @@ export default function BeyondWorkSection() {
               transition={{ duration: 0.4 }}
               className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
             >
-              {/* 2×2 Photo Grid — no radius */}
-              <div className="lg:col-span-7 grid grid-cols-2 gap-3 sm:gap-4">
-                {activeItem.photos.map((photo, idx) => (
-                  <div key={idx} className="overflow-hidden" style={{ aspectRatio: '1/1' }}>
-                    <img
-                      src={egyptPhotos[photo.assetKey]}
-                      alt={photo.caption}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
+              <PhotoLayout item={activeItem} />
 
               {/* Details */}
               <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-6">
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-[#491B37]/60 block mb-2">
-                    Global Impact &amp; Community
+                    {activeItem.tagline}
                   </span>
 
-                  <h3 className="font-monthey text-2xl sm:text-3xl md:text-4xl font-bold text-[#491B37] leading-tight mb-4">
+                  <h3 className="font-monthey text-2xl sm:text-3xl md:text-4xl font-normal text-[#491B37] leading-tight mb-4">
                     {activeItem.role}
                   </h3>
 
@@ -87,14 +152,27 @@ export default function BeyondWorkSection() {
                   </p>
                 </div>
 
-                {/* Nav arrows */}
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#491B37]/15">
-                  <button aria-label="Previous" className="w-10 h-10 border border-[#491B37] flex items-center justify-center hover:bg-[#491B37] hover:text-[#FFF8EE] transition-colors cursor-pointer">
-                    <ArrowLeft className="w-4 h-4" />
-                  </button>
-                  <button aria-label="Next" className="w-10 h-10 border border-[#491B37] flex items-center justify-center hover:bg-[#491B37] hover:text-[#FFF8EE] transition-colors cursor-pointer">
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
+                {/* Nav arrows + counter */}
+                <div className="flex items-center justify-between pt-4 border-t border-[#491B37]/15">
+                  <span className="font-mono text-xs text-[#491B37]/50">
+                    {String(activeIndex + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={goPrev}
+                      aria-label="Previous"
+                      className="w-10 h-10 border border-[#491B37] flex items-center justify-center hover:bg-[#491B37] hover:text-[#FFF8EE] transition-colors cursor-pointer"
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={goNext}
+                      aria-label="Next"
+                      className="w-10 h-10 border border-[#491B37] flex items-center justify-center hover:bg-[#491B37] hover:text-[#FFF8EE] transition-colors cursor-pointer"
+                    >
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </motion.div>

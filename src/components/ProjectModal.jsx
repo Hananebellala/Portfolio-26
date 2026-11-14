@@ -45,7 +45,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 <span className="text-xs font-mono uppercase tracking-widest text-[#491B37]/60">
                   {project.category}
                 </span>
-                <h3 className="font-monthey text-2xl sm:text-3xl font-bold text-[#491B37]">
+                <h3 className="font-monthey text-2xl sm:text-3xl font-normal text-[#491B37]">
                   {project.title}
                 </h3>
               </div>
@@ -71,7 +71,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
               </div>
 
               <div>
-                <h4 className="font-monthey text-lg font-bold text-[#491B37] mb-2">{project.subtitle}</h4>
+                <h4 className="font-monthey text-lg font-normal text-[#491B37] mb-2">{project.subtitle}</h4>
                 <p className="text-sm sm:text-base text-[#491B37]/85 leading-relaxed">{project.description}</p>
               </div>
 

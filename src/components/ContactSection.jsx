@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Phone, Mail, Send, Check, Copy } from 'lucide-react'
+import { Phone, Mail, Send, Check, Copy, Loader2 } from 'lucide-react'
 import { portfolioData } from '../data/portfolioData'
 import thankYouImg from '../assets/ThankYou.png'
 
 export default function ContactSection() {
   const { personal } = portfolioData
   const [copiedType, setCopiedType] = useState(null)
-  const [isSent, setIsSent] = useState(false)
+  const [status, setStatus] = useState('idle') // idle | sending | sent | error
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
 
   const copyToClipboard = (text, type) => {
@@ -16,13 +16,36 @@ export default function ContactSection() {
     setTimeout(() => setCopiedType(null), 2500)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setIsSent(true)
-    setTimeout(() => {
-      setIsSent(false)
+    setStatus('sending')
+
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${personal.formSubmitKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: `Portfolio message from ${formData.name}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      })
+
+      if (!response.ok) throw new Error('Failed to send')
+
+      setStatus('sent')
       setFormData({ name: '', email: '', message: '' })
-    }, 4000)
+      setTimeout(() => setStatus('idle'), 5000)
+    } catch {
+      setStatus('error')
+      setTimeout(() => setStatus('idle'), 5000)
+    }
   }
 
   return (
@@ -40,7 +63,7 @@ export default function ContactSection() {
           transition={{ duration: 0.8 }}
           className="lg:col-span-5 flex justify-center lg:justify-start"
         >
-          <div className="w-full max-w-xs sm:max-w-sm overflow-hidden border border-[#491B37]/10">
+          <div className="w-full max-w-xs sm:max-w-sm overflow-hidden">
             <img
               src={thankYouImg}
               alt="Thank you"
@@ -66,7 +89,7 @@ export default function ContactSection() {
             Let's connect
           </span>
 
-          <h2 className="font-monthey text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-[#491B37] leading-none mb-4">
+          <h2 className="font-monthey text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal text-[#491B37] leading-none mb-4">
             thank<br />you.
           </h2>
 
@@ -112,16 +135,21 @@ export default function ContactSection() {
             <h4 className="font-semibold text-xs uppercase tracking-wider text-[#491B37]/80 mb-4">
               Send a direct message
             </h4>
-            {isSent ? (
+            {status === 'sent' ? (
               <div className="p-4 bg-[#D0E4FF] text-[#491B37] text-sm flex items-center gap-2">
                 <Check className="w-4 h-4" />
-                <span>Thank you! I'll get back to you promptly.</span>
+                <span>Thank you! Your message was sent — I'll get back to you promptly.</span>
+              </div>
+            ) : status === 'error' ? (
+              <div className="p-4 bg-[#491B37]/10 text-[#491B37] text-sm">
+                Something went wrong. Please email me directly at {personal.email}.
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <input
                     type="text"
+                    name="name"
                     required
                     placeholder="Your Name"
                     value={formData.name}
@@ -130,6 +158,7 @@ export default function ContactSection() {
                   />
                   <input
                     type="email"
+                    name="email"
                     required
                     placeholder="Your Email"
                     value={formData.email}
@@ -138,6 +167,7 @@ export default function ContactSection() {
                   />
                 </div>
                 <textarea
+                  name="message"
                   required
                   rows="3"
                   placeholder="Your message or collaboration idea..."
@@ -147,10 +177,20 @@ export default function ContactSection() {
                 />
                 <button
                   type="submit"
-                  className="w-full py-3 bg-[#491B37] text-[#FFF8EE] text-xs font-semibold uppercase tracking-wider hover:bg-[#61244a] transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  disabled={status === 'sending'}
+                  className="w-full py-3 bg-[#491B37] text-[#FFF8EE] text-xs font-semibold uppercase tracking-wider hover:bg-[#61244a] transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-wait"
                 >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>Send Message</span>
+                  {status === 'sending' ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>Sending...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-3.5 h-3.5" />
+                      <span>Send Message</span>
+                    </>
+                  )}
                 </button>
               </form>
             )}

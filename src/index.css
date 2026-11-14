@@ -45,6 +45,8 @@
 /* ─── Font utility classes ─── */
 .font-monthey {
   font-family: 'Monthey', 'Playfair Display', Georgia, serif;
+  letter-spacing: 5px;
+  font-weight: 400 !important;
 }
 
 .font-signature {
@@ -67,4 +69,12 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #61244a;
+}
+
+/* Inherited custom arrow cursor (set on <html> by CustomCursor) */
+@media (pointer: fine) {
+  html,
+  html * {
+    cursor: inherit;
+  }
 }

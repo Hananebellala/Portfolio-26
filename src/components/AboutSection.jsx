@@ -23,10 +23,10 @@ export default function AboutSection({ onScrollNext }) {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="lg:col-span-7 flex flex-col items-start"
         >
-          <span className="font-monthey text-6xl sm:text-7xl md:text-8xl font-bold text-[#FFF8EE] leading-none">
+          <span className="font-monthey text-6xl sm:text-7xl md:text-8xl font-normal text-[#FFF8EE] leading-none">
             {about.greeting}
           </span>
-          <h2 className="font-monthey text-5xl sm:text-6xl md:text-7xl font-bold text-[#FFF8EE] mb-8 leading-tight">
+          <h2 className="font-monthey text-5xl sm:text-6xl md:text-7xl font-normal text-[#FFF8EE] mb-8 leading-tight">
             {about.headline}
           </h2>
 
@@ -36,7 +36,6 @@ export default function AboutSection({ onScrollNext }) {
 
           <a
             href={personal.resumeUrl}
-            download
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-8 py-3.5 border border-[#FFF8EE] text-[#FFF8EE] font-medium text-sm tracking-wide hover:bg-[#FFF8EE] hover:text-[#491B37] transition-colors duration-200 group"
