@@ -23,7 +23,7 @@ export const portfolioData = {
   about: {
     greeting: "hi.",
     headline: "I am Hanane",
-    bio: "My name is Hanane Bellala, I am a 4th-year Computer Science Student at ESI (Algiers), specializing in information systems and software engineering. Experienced in designing and implementing full-stack systems, enterprise architecture models, and agile management frameworks. Trained in key modern frameworks (Python, React, Flutter, Node.js) and business BPM, ERP and software projects. Passionate about building scalable, secure AI systems that integrate business needs, data intelligence, and modern architectures.",
+    bio: "My name is Hanane Bellala, I am a 5th-year Computer Science Student at ESI (Algiers), specializing in information systems and software engineering. Experienced in designing and implementing full-stack systems, enterprise architecture models, and agile management frameworks. Trained in key modern frameworks (Python, React, Flutter, Node.js) and business BPM, ERP and software projects. Passionate about building scalable, secure AI systems that integrate business needs, data intelligence, and modern architectures.",
     resumeCta: "Download Resume",
   },
 
